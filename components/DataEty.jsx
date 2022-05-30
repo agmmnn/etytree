@@ -16,7 +16,7 @@ export function DataEty() {
   }, [data]);
 
   return (
-    <Container>
+    <>
       {data[1] &&
         Object.keys(data[1].words).map((wd) => {
           return (
@@ -25,6 +25,6 @@ export function DataEty() {
             </Paper>
           );
         })}
-    </Container>
+    </>
   );
 }
