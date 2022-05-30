@@ -61,6 +61,7 @@ export function Welcome() {
           </Text>
         </Title>
       </Container>
+
       <Container
         style={{
           display: 'flex',
@@ -68,7 +69,6 @@ export function Welcome() {
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
-          marginTop: '20px',
         }}
       >
         <Input
@@ -89,11 +89,10 @@ export function Welcome() {
       </Container>
       <Container
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: '10px',
-          maxWidth: '400px',
+          display: 'flex',
+          flexDirection: 'column',
+          marginTop: '5px',
+          maxWidth: '450px',
         }}
       >
         <MultiSelect
