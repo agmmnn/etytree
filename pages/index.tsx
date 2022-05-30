@@ -6,7 +6,7 @@ import { Container } from '@mantine/core';
 export default function HomePage() {
   return (
     <>
-      <ColorSchemeToggle />
+      {/* <ColorSchemeToggle /> */}
       <Welcome />
       <div style={{ boxSizing: 'border-box', margin: 'auto', maxHeight: '100%' }}>
         <div

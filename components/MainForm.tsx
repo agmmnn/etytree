@@ -18,7 +18,7 @@ import {
 import useStyles from './MainForm.styles';
 import { GiDiceTwentyFacesOne } from 'react-icons/gi';
 
-const rand_words = ['amphora', 'ancient', 'galaxy', 'horse', 'microbe', 'planet'];
+const svglist = ['amphora', 'ancient', 'galaxy', 'horse', 'microbe', 'planet', 'diamond'];
 
 const countriesData = [
   { label: 'English', value: 'EN' },
@@ -33,7 +33,7 @@ export function Welcome() {
   const [randWord, setRandWord] = useState('');
 
   useEffect(() => {
-    setRandWord(rand_words[Math.floor(Math.random() * rand_words.length)]);
+    setRandWord(svglist[Math.floor(Math.random() * svglist.length)]);
   }, []);
 
   console.log(randWord);
@@ -53,12 +53,12 @@ export function Welcome() {
         <Paper p="sm" style={{ marginTop: '24px' }} /* shadow="md" */>
           <Image src={`/assets/${randWord}.svg`} alt="Landscape picture" width={60} height={60} />
         </Paper>
-
         <Title className={classes.title}>
           ety
           <Text inherit variant="gradient" component="span">
             tree
           </Text>
+          <Text className={classes.description}>Visualize Etmological Relaitons</Text>
         </Title>
       </Container>
 
@@ -69,6 +69,7 @@ export function Welcome() {
           alignItems: 'center',
           justifyContent: 'center',
           gap: '10px',
+          marginTop: '20px',
         }}
       >
         <Input
@@ -78,12 +79,12 @@ export function Welcome() {
           styles={{ input: {} }}
           rightSectionWidth={100}
           rightSection={
-            <Button radius="xl" color="dark" size="lg">
+            <Button radius="xl" color="cyan" size="lg">
               Submit
             </Button>
           }
         />
-        <Button radius="xl" size="lg" variant="subtle" color="dark" title="Random Word">
+        <Button radius="xl" size="lg" variant="outline" color="cyan" title="Random Word">
           <GiDiceTwentyFacesOne size={28} />
         </Button>
       </Container>
