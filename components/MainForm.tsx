@@ -14,7 +14,6 @@ import {
   CloseButton,
   SelectItemProps,
   MultiSelectValueProps,
-  Tabs,
 } from '@mantine/core';
 import useStyles from './MainForm.styles';
 import axios from 'axios';

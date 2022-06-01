@@ -21,8 +21,7 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
       <Head>
         <title>etytree - Visualize Etymology</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
-        <link rel="shortcut icon" href="/favicon.svg" />
-        {/* <link href="/fonts/style.css" rel="stylesheet" /> */}
+        <link rel="favicon" href="/favicon.svg" />
       </Head>
 
       <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
@@ -30,6 +29,20 @@ export default function App(props: AppProps & { colorScheme: ColorScheme }) {
           <Component {...pageProps} />
         </MantineProvider>
       </ColorSchemeProvider>
+      <style>
+        {`
+        ::-webkit-scrollbar {
+          width:0.9em;
+          height: 0.9em;
+        }
+        ::-webkit-scrollbar-track {
+          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: #383c63;
+        }
+        `}
+      </style>
     </>
   );
 }

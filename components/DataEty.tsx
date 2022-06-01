@@ -5,8 +5,8 @@ import { Canvas, Node } from 'reaflow';
 
 export function DataEty({ wordId }) {
   const [data, setData] = useState([]);
-  const [nodes, setNodes] = useState<any[]>([]);
-  const [edges, setEdges] = useState<any[]>([]);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
 
   useEffect(() => {
     axios
@@ -50,7 +50,9 @@ export function DataEty({ wordId }) {
           width: 200,
           word: data[1]['words'][item]['word'],
           language: data[1]['words'][item]['language_name'],
-          definitions: data[1]['words'][item]['entries'][0]['pos'][0]['definitions'][0],
+          definitions:
+            data[1]['words'][item]['entries'] &&
+            data[1]['words'][item]['entries'][0]['pos'][0]['definitions'][0],
         });
       });
       setNodes(list_nodes);
@@ -63,21 +65,7 @@ export function DataEty({ wordId }) {
   }, [data]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '60vh' }}>
-      <style>
-        {`
-        ::-webkit-scrollbar {
-          width:0.9em;
-          height: 0.9em;
-        }
-        ::-webkit-scrollbar-track {
-          box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        }
-        ::-webkit-scrollbar-thumb {
-          background-color: #383c63;
-        }
-        `}
-      </style>
+    <div style={{ position: 'relative', width: '100%', height: '70vh' }}>
       <div
         style={{
           position: 'absolute',
@@ -96,7 +84,6 @@ export function DataEty({ wordId }) {
       >
         <Canvas
           className="canvas"
-          fit={true}
           // dragEdge={false}
           nodes={nodes}
           edges={edges}
@@ -130,15 +117,3 @@ export function DataEty({ wordId }) {
     </div>
   );
 }
-
-/*
-    <>
-      {data[1] &&
-        Object.keys(data[1]['words']).map((wd) => {
-          return (
-            <Paper shadow="sm" p="xs" withBorder key={uuidv4()}>
-              {data[1]['words'][wd].word}
-            </Paper>
-          );})}
-    </>
-*/
