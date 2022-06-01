@@ -14,9 +14,11 @@ import {
   CloseButton,
   SelectItemProps,
   MultiSelectValueProps,
+  Tabs,
 } from '@mantine/core';
 import useStyles from './MainForm.styles';
 import { GiDiceTwentyFacesOne } from 'react-icons/gi';
+import axios from 'axios';
 
 const svglist = ['amphora', 'ancient', 'galaxy', 'horse', 'microbe', 'planet', 'diamond'];
 
@@ -28,15 +30,32 @@ const countriesData = [
   { label: 'Russian', value: 'RU' },
 ];
 
-export function Welcome() {
+export function MainForm() {
   const { classes } = useStyles();
+  const [word, setWord] = useState('');
   const [randWord, setRandWord] = useState('');
 
   useEffect(() => {
     setRandWord(svglist[Math.floor(Math.random() * svglist.length)]);
+    console.log(randWord);
   }, []);
 
-  console.log(randWord);
+  const getdata = () => {
+    axios
+      .get(`https://api.etymologyexplorer.com/prod/autocomplete?word=${word}&language=English`)
+      .then((response) => {
+        console.log(response.data.auto_complete_data[0].word);
+      })
+      .catch((error) => console.log(error));
+  };
+  const getrandom = () => {
+    axios
+      .get(`https://api.etymologyexplorer.com/prod/random_etymology?language=English`)
+      .then((response) => {
+        console.log(response.data.word);
+      })
+      .catch((error) => console.log(error));
+  };
 
   return (
     <>
@@ -73,18 +92,32 @@ export function Welcome() {
         }}
       >
         <Input
-          placeholder={randWord[0] && randWord[0].toUpperCase() + randWord.substring(1)}
+          value={word}
+          onChange={(e) => setWord(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && word) {
+              getdata();
+            }
+          }}
+          placeholder={randWord[0] && randWord}
           radius="xl"
           size="lg"
-          styles={{ input: {} }}
-          rightSectionWidth={100}
-          rightSection={
-            <Button radius="xl" color="cyan" size="lg">
-              Submit
-            </Button>
-          }
+          // styles={{ input: {} }}
+          // rightSectionWidth={100}
+          // rightSection={
+          //   <Button radius="xl" color="cyan" size="lg">
+          //     Search
+          //   </Button>
+          // }
         />
-        <Button radius="xl" size="lg" variant="outline" color="cyan" title="Random Word">
+        <Button
+          radius="xl"
+          size="lg"
+          variant="outline"
+          color="cyan"
+          title="Random Word"
+          onClick={getrandom}
+        >
           <GiDiceTwentyFacesOne size={28} />
         </Button>
       </Container>
@@ -96,7 +129,7 @@ export function Welcome() {
           maxWidth: '450px',
         }}
       >
-        <MultiSelect
+        {/* <MultiSelect
           data={countriesData}
           limit={20}
           valueComponent={Value}
@@ -105,9 +138,9 @@ export function Welcome() {
           searchable
           defaultValue={['EN']}
           placeholder="Select a language"
-          /*label="Select a language"
-        {...props}*/
-        />
+          label="Select a language"
+        {...props}
+        /> */}
       </Container>
     </>
   );
