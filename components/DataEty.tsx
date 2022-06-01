@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Title, Text, Input, Container, Paper } from '@mantine/core';
+import { Title, Text, Input, Container, Paper, Badge } from '@mantine/core';
 import axios from 'axios';
 import { Canvas, Node } from 'reaflow';
 
-export function DataEty() {
+export function DataEty({ wordId }) {
   const [data, setData] = useState([]);
   const [nodes, setNodes] = useState<any[]>([]);
   const [edges, setEdges] = useState<any[]>([]);
@@ -16,10 +16,23 @@ export function DataEty() {
   }, []);
 
   useEffect(() => {
+    if (wordId !== 0) {
+      axios
+        .get('https://api.etymologyexplorer.com/prod/get_trees?ids[]=' + wordId)
+        .then((response) => setData(response.data))
+        .catch((error) => console.log(error));
+    }
+  }, [wordId]);
+
+  useEffect(() => {
     if (data[1]) {
       interface NodeObject {
         id: number;
-        text: string;
+        height: number;
+        width: number;
+        word: string;
+        language: string;
+        definitions: string;
       }
       interface EdgeObject {
         id: string;
@@ -33,9 +46,11 @@ export function DataEty() {
       Object.keys(data[1]['words']).map((item) => {
         list_nodes.push({
           id: data[1]['words'][item]['_id'],
-          text: `${data[1]['words'][item]['word']}
-          ${data[1]['words'][item]['language_name']},
-          ${data[1]['words'][item]['entries'][0]['pos'][0]['definitions'][0]}`,
+          height: 100,
+          width: 200,
+          word: data[1]['words'][item]['word'],
+          language: data[1]['words'][item]['language_name'],
+          definitions: data[1]['words'][item]['entries'][0]['pos'][0]['definitions'][0],
         });
       });
       setNodes(list_nodes);
@@ -86,7 +101,30 @@ export function DataEty() {
           nodes={nodes}
           edges={edges}
           direction="RIGHT"
-          node={<Node style={{ fill: '#117daa', strokeWidth: 0 }}>sdf</Node>}
+          node={
+            <Node style={{ fill: '#117daa', strokeWidth: 0 }}>
+              {(e) => (
+                <foreignObject height="100px" width="200px">
+                  <div
+                    style={{
+                      padding: 6,
+                      textAlign: 'center',
+                    }}
+                  >
+                    <Badge variant="filled" color="indigo" size="sm">
+                      {e.node['language']}
+                    </Badge>
+                    <Title order={5} style={{ color: '#fff' }}>
+                      {e.node['word']}
+                    </Title>
+                    <Text color="white" size="xs">
+                      <i>{e.node['definitions']}</i>
+                    </Text>
+                  </div>
+                </foreignObject>
+              )}
+            </Node>
+          }
         />
       </div>
     </div>

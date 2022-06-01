@@ -1,6 +1,5 @@
 import { MainForm } from '../components/MainForm';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle';
-import { DataEty } from '../components/DataEty';
 import { Grid, Tabs, MediaQuery, ScrollArea, Container } from '@mantine/core';
 
 import { FaWikipediaW, FaEtsy } from 'react-icons/fa';
@@ -17,7 +16,6 @@ export default function HomePage() {
       {/* <ColorSchemeToggle /> */}
 
       <MainForm />
-      <DataEty />
     </>
   );
 }

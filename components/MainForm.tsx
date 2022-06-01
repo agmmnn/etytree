@@ -22,6 +22,7 @@ import { saveAsPng } from 'save-html-as-image';
 
 import { GiDiceTwentyFacesOne } from 'react-icons/gi';
 import { BsImage } from 'react-icons/bs';
+import { DataEty } from '../components/DataEty';
 
 const svglist = ['amphora', 'ancient', 'galaxy', 'horse', 'microbe', 'planet', 'diamond'];
 
@@ -36,6 +37,7 @@ const countriesData = [
 export function MainForm() {
   const { classes } = useStyles();
   const [word, setWord] = useState('');
+  const [wordId, setWordId] = useState(0);
   const [randWord, setRandWord] = useState('');
 
   useEffect(() => {
@@ -55,7 +57,8 @@ export function MainForm() {
     axios
       .get(`https://api.etymologyexplorer.com/prod/random_etymology?language=English`)
       .then((response) => {
-        console.log(response.data.word);
+        console.log(response.data.word, response.data.id);
+        setWordId(response.data.id);
       })
       .catch((error) => console.log(error));
   };
@@ -161,6 +164,7 @@ export function MainForm() {
         {...props}
         /> */}
       </Container>
+      <DataEty wordId={wordId} />
     </>
   );
 }
