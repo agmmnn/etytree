@@ -17,8 +17,11 @@ import {
   Tabs,
 } from '@mantine/core';
 import useStyles from './MainForm.styles';
-import { GiDiceTwentyFacesOne } from 'react-icons/gi';
 import axios from 'axios';
+import { saveAsPng } from 'save-html-as-image';
+
+import { GiDiceTwentyFacesOne } from 'react-icons/gi';
+import { BsImage } from 'react-icons/bs';
 
 const svglist = ['amphora', 'ancient', 'galaxy', 'horse', 'microbe', 'planet', 'diamond'];
 
@@ -55,6 +58,12 @@ export function MainForm() {
         console.log(response.data.word);
       })
       .catch((error) => console.log(error));
+  };
+  const saveAsImage = () => {
+    saveAsPng(document.querySelector("svg[id*='ref']"), {
+      filename: 'etytree',
+      printDate: true,
+    });
   };
 
   return (
@@ -119,6 +128,16 @@ export function MainForm() {
           onClick={getrandom}
         >
           <GiDiceTwentyFacesOne size={28} />
+        </Button>
+        <Button
+          radius="xl"
+          size="xs"
+          variant="outline"
+          color="cyan"
+          title="Save As Image"
+          onClick={saveAsImage}
+        >
+          <BsImage size={16} />
         </Button>
       </Container>
       <Container
