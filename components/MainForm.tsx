@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import Image from 'next/image';
-import { useEffect, useState, forwardRef } from 'react';
+import { useEffect, useState, forwardRef, createRef } from 'react';
 import {
   Title,
   Text,
@@ -14,12 +14,15 @@ import {
   CloseButton,
   SelectItemProps,
   MultiSelectValueProps,
+  Autocomplete,
 } from '@mantine/core';
+import { useFocusTrap } from '@mantine/hooks';
 import useStyles from './MainForm.styles';
 import axios from 'axios';
 import { saveAsPng } from 'save-html-as-image';
 
 import { GiDiceTwentyFacesOne } from 'react-icons/gi';
+import { CgSearch } from 'react-icons/cg';
 import { BsImage } from 'react-icons/bs';
 import { DataEty } from '../components/DataEty';
 
@@ -36,22 +39,15 @@ const countriesData = [
 export function MainForm() {
   const { classes } = useStyles();
   const [word, setWord] = useState('');
+
   const [wordId, setWordId] = useState(0);
   const [randWord, setRandWord] = useState('');
-
   useEffect(() => {
     setRandWord(svglist[Math.floor(Math.random() * svglist.length)]);
     console.log(randWord);
+    getData(randWord);
   }, []);
 
-  const getdata = () => {
-    axios
-      .get(`https://api.etymologyexplorer.com/prod/autocomplete?word=${word}&language=English`)
-      .then((response) => {
-        console.log(response.data.auto_complete_data[0].word);
-      })
-      .catch((error) => console.log(error));
-  };
   const getrandom = () => {
     axios
       .get(`https://api.etymologyexplorer.com/prod/random_etymology?language=English`)
@@ -68,6 +64,23 @@ export function MainForm() {
     });
   };
 
+  const [value, setValue] = useState('');
+  const [acData, setAcData] = useState([]);
+  const inpref = createRef<HTMLInputElement>();
+
+  const getData = (value) => {
+    axios
+      .get(`https://api.etymologyexplorer.com/prod/autocomplete?word=${value}&language=English`)
+      .then((r) => {
+        let items = r.data.auto_complete_data.map((item) => [item._id, item.word]);
+        setAcData(items);
+        console.log(items);
+        setWordId(items[0][0]);
+        console.log(items[0][0]);
+      })
+      .catch((error) => console.log(error));
+  };
+
   return (
     <>
       <Container
@@ -81,7 +94,7 @@ export function MainForm() {
         }}
       >
         <Paper p="sm" style={{ marginTop: '24px' }} /* shadow="md" */>
-          <Image src={`/assets/${randWord}.svg`} alt="Landscape picture" width={60} height={60} />
+          <Image src={`/assets/${randWord}.svg`} width={60} height={60} />
         </Paper>
         <Title className={classes.title}>
           ety
@@ -103,23 +116,31 @@ export function MainForm() {
         }}
       >
         <Input
-          value={word}
-          onChange={(e) => setWord(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && word) {
-              getdata();
-            }
-          }}
-          placeholder={randWord[0] && randWord}
           radius="xl"
           size="lg"
-          // styles={{ input: {} }}
-          // rightSectionWidth={100}
-          // rightSection={
-          //   <Button radius="xl" color="cyan" size="lg">
-          //     Search
-          //   </Button>
-          // }
+          value={value}
+          placeholder={randWord[0] && randWord}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && value) {
+              getData(value);
+            }
+          }}
+          ref={inpref}
+          rightSectionWidth={68}
+          rightSection={
+            <Button
+              radius="xl"
+              color="cyan"
+              size="lg"
+              onClick={() => {
+                getData(value);
+                inpref.current.focus();
+              }}
+            >
+              <CgSearch size={26} />
+            </Button>
+          }
         />
         <Button
           radius="xl"
@@ -127,7 +148,10 @@ export function MainForm() {
           variant="outline"
           color="cyan"
           title="Random Word"
-          onClick={getrandom}
+          onClick={() => {
+            getData(value);
+            inpref.current.focus();
+          }}
         >
           <GiDiceTwentyFacesOne size={28} />
         </Button>
@@ -159,10 +183,11 @@ export function MainForm() {
           searchable
           defaultValue={['EN']}
           placeholder="Select a language"
-          label="Select a language"
-        {...props}
+          // label="Select a language"
+          // {...props}
         /> */}
       </Container>
+
       <DataEty wordId={wordId} />
     </>
   );

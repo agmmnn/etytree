@@ -8,20 +8,19 @@ export function DataEty({ wordId }) {
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
 
-  useEffect(() => {
+  const getData = () => {
     axios
-      .get('https://api.etymologyexplorer.com/prod/get_trees?ids[]=1315')
+      .get('https://api.etymologyexplorer.com/prod/get_trees?ids[]=' + wordId)
       .then((response) => setData(response.data))
       .catch((error) => console.log(error));
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
 
   useEffect(() => {
-    if (wordId !== 0) {
-      axios
-        .get('https://api.etymologyexplorer.com/prod/get_trees?ids[]=' + wordId)
-        .then((response) => setData(response.data))
-        .catch((error) => console.log(error));
-    }
+    if (wordId !== 0) getData();
   }, [wordId]);
 
   useEffect(() => {
