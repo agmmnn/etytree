@@ -148,10 +148,7 @@ export function MainForm() {
           variant="outline"
           color="cyan"
           title="Random Word"
-          onClick={() => {
-            getData(value);
-            inpref.current.focus();
-          }}
+          onClick={getrandom}
         >
           <GiDiceTwentyFacesOne size={28} />
         </Button>
