@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Title, Text, Input, Container, Paper, Badge } from '@mantine/core';
 import axios from 'axios';
-import { Canvas, Node } from 'reaflow';
+import { Canvas, Node, ElkRoot } from 'reaflow';
 
 export function DataEty({ wordId }) {
   const [data, setData] = useState([]);
@@ -62,6 +62,14 @@ export function DataEty({ wordId }) {
       setEdges(list_edges);
     }
   }, [data]);
+  const [size, setSize] = React.useState({
+    width: 2000,
+    height: 2000,
+  });
+  const onLayoutChange = (layout: ElkRoot) => {
+    if (layout.width && layout.height)
+      setSize({ width: layout.width + 200, height: layout.height + 200 });
+  };
 
   return (
     <div style={{ position: 'relative', width: '100%', height: '70vh' }}>
@@ -86,6 +94,9 @@ export function DataEty({ wordId }) {
           // dragEdge={false}
           nodes={nodes}
           edges={edges}
+          maxWidth={size.width}
+          maxHeight={size.height}
+          onLayoutChange={onLayoutChange}
           direction="RIGHT"
           node={
             <Node style={{ fill: '#117daa', strokeWidth: 0 }}>
